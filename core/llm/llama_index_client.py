@@ -1,5 +1,5 @@
 from .base import LLMInterface
-from llama_index import VectorStoreIndex, SimpleDirectoryReader
+from llama_index.core import VectorStoreIndex, SimpleDirectoryReader
 
 class LlamaIndexClient(LLMInterface):
     def __init__(self):

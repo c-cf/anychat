@@ -1,13 +1,23 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Lifespan
 from dotenv import load_dotenv
+from core.db.sqlite_database import SQLiteDatabase
 import os
 
 # Load environment variables
 load_dotenv()
 
-app = FastAPI()
+app = FastAPI(lifespan=Lifespan())
 
-# Configuration management
+@app.lifespan
+async def lifespan(app: FastAPI):
+    await db.connect()
+    yield
+    await db.disconnect()
+
+
+# Initialize SQLite database
+db = SQLiteDatabase("./app.db")
+
 class Config:
     DB_TYPE = os.getenv("DB_TYPE", "sqlite")  # Default to SQLite
     DB_CONNECTION = os.getenv("DB_CONNECTION", "sqlite:///./app.db")  # SQLite connection string
