@@ -50,11 +50,11 @@ Welcome to AnyChat! This is a FastAPI-based chat application that combines docum
     uvicorn main:app --reload
     ```
 
-2. Open your browser and visit [http://127.0.0.1:8000/docs](http://_vscodecontentref_/23) to view the API documentation.
+2. Open your browser and visit `http://127.0.0.1:8000/docs` to view the API documentation.
 
 ## Testing
 
-We provide detailed testing documentation. Please refer to [TESTING.md](http://_vscodecontentref_/24) for information on how to run and write test cases.
+We provide detailed testing documentation. Please refer to [TESTING.md](https://github.com/c-cf/anychat/blob/main/TESTING.md) for information on how to run and write test cases.
 
 ## Contributing
 
