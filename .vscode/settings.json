@@ -48,5 +48,8 @@
     },
     "custom": true, // Enable the `custom` dictionary
     "internal-terms": true // Disable the `internal-terms` dictionary
-  }
+  },
+  "python.analysis.extraPaths": [
+    "./.venv/lib/elasticsearch"
+  ]
 }
