@@ -1,5 +1,5 @@
 asposestorage==1.0.2
-fastapi==0.115.8
+fastapi
 httpx==0.28.1
 langchain==0.3.19
 llama_index==0.12.19
@@ -8,3 +8,5 @@ pydantic==2.10.6
 python-dotenv==1.0.1
 qdrant_client==1.13.2
 sentence_transformers==3.4.1
+uvicorn
+pytest

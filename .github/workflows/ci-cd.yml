@@ -28,14 +28,4 @@ jobs:
 
     - name: Run tests
       run: |
-        # Add your test command here
-        echo "Running tests..."
-
-    - name: Build Docker image
-      run: |
-        docker-compose build
-
-    - name: Push Docker image
-      run: |
-        # Add your Docker registry login and push commands here
-        echo "Pushing Docker image..."
+        pytest
