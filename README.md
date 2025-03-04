@@ -11,11 +11,11 @@ Welcome to AnyChat! This is a FastAPI-based chat application that combines docum
 
 ## TODO List
 ### Infrastructure
-- [ ] Design and implement complete database models (using SQLAlchemy ORM)
-- [ ] Establish database migration system (Alembic)
-- [ ] Implement containerized deployment (Docker & Docker Compose)
+- [x] Design and implement complete database models (using SQLAlchemy ORM)
+- [x] Establish database migration system (Alembic)
+- [x] Implement containerized deployment (Docker & Docker Compose)
 - [ ] Set up CI/CD pipeline
-- [ ] Create configurations for development, testing, and production environments
+- [x] Create configurations for development, testing, and production environments
 
 ### User Management & Authentication
 
