@@ -30,3 +30,15 @@ def test_add_role():
     response = client.post("/roles", json={"role": "new_role", "permissions": ["add_document"]})
     assert response.status_code == 200
     assert response.json() == {"message": "Role added successfully"}
+
+def test_email_verification():
+    # 模擬註冊
+    response = client.post("/register", json={"username": "testuser", "email": "test@example.com", "password": "password"})
+    assert response.status_code == 200
+    assert "Please verify your email" in response.json()["message"]
+
+    # 模擬驗證
+    verification_token = "mock_verification_token"  # 使用測試時生成的 Token
+    response = client.get(f"/verify-email?token={verification_token}")
+    assert response.status_code == 200
+    assert response.json() == {"message": "Email verified successfully"}

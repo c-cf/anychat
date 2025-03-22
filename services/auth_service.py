@@ -78,9 +78,21 @@ async def reset_password(reset_token: str, new_password: str):
     return
 
 async def verify_email_token(token: str):
-    if token != "dummy_verification_token":
-         raise HTTPException(status_code=400, detail="Invalid email verification token")
-    return
+    try:
+        payload = jwt.decode(token, Config.SECRET_KEY, algorithms=[Config.ALGORITHM])
+        user_id: str = payload.get("sub")
+        if not user_id:
+            raise HTTPException(status_code=400, detail="Invalid token")
+        
+        # 更新資料庫中的 is_verified 欄位
+        await db.execute(
+            "UPDATE users SET is_verified = 1 WHERE id = :user_id",
+            {"user_id": user_id}
+        )
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=400, detail="Token has expired")
+    except jwt.JWTError:
+        raise HTTPException(status_code=400, detail="Invalid token")
 
 async def google_oauth_login():
     # Simulate google oauth login.
@@ -93,3 +105,10 @@ async def setup_mfa(current_user):
 async def verify_mfa(current_user, code: str):
     # Simulate TOTP verification; in real code, check with pyotp.TOTP(current_user.mfa_secret)
     return code == "123456"
+
+# 新增方法：生成驗證 Token
+async def generate_email_verification_token(user_id: str) -> str:
+    expiration = datetime.utcnow() + timedelta(hours=24)  # Token 有效期 24 小時
+    payload = {"sub": user_id, "exp": expiration}
+    token = jwt.encode(payload, Config.SECRET_KEY, algorithm=Config.ALGORITHM)
+    return token

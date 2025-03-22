@@ -27,6 +27,7 @@ class CopyUser(Base):
     email = Column(String, unique=True, nullable=False)
     password_hash = Column(String, nullable=False)
     is_active = Column(Boolean, default=True)
+    is_verified = Column(Boolean, default=False)  # 新增欄位
     created_at = Column(DateTime, nullable=False)
     updated_at = Column(DateTime, nullable=False)
 

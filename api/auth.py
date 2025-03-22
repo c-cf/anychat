@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends, BackgroundTasks
 from services.permission_service import PermissionService
 from services.auth_service import (
     get_current_user,
@@ -10,8 +10,10 @@ from services.auth_service import (
     verify_email_token,
     google_oauth_login,
     setup_mfa,
-    verify_mfa
+    verify_mfa,
+    generate_email_verification_token
 )
+from services.email_service import send_email  # 假設有一個 email_service 處理寄信
 
 router = APIRouter()
 
@@ -46,9 +48,19 @@ async def add_role(
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/register")
-async def register(data: dict):
+async def register(data: dict, background_tasks: BackgroundTasks):
     user = await register_user(data)
-    return user
+    
+    # 生成驗證 Token 並寄送驗證信
+    verification_token = await generate_email_verification_token(user["id"])
+    verification_link = f"http://localhost:8000/verify-email?token={verification_token}"
+    background_tasks.add_task(
+        send_email,
+        to=user["email"],
+        subject="Verify your email",
+        body=f"Click the link to verify your email: {verification_link}"
+    )
+    return {"message": "Registration successful. Please verify your email."}
 
 @router.post("/login")
 async def login(data: dict):
@@ -73,7 +85,7 @@ async def password_reset(data: dict):
 @router.get("/verify-email")
 async def verify_email(token: str):
     await verify_email_token(token)
-    return {"message": "Email verified"}
+    return {"message": "Email verified successfully"}
 
 @router.get("/login/google")
 async def login_google():
